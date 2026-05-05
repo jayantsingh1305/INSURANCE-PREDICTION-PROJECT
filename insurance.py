@@ -30,7 +30,6 @@ for col in numeric_columns:
     print(f"Plotting histogram for: {col}")
     plt.show()
 
-# Countplot for categorical column
 plt.figure(figsize=(6,4))
 sns.countplot(x=df['children'])
 plt.title('Count of Children')
@@ -38,7 +37,6 @@ plt.xlabel('Number of Children')
 plt.ylabel('Count')
 plt.show()
 
-# Countplot for sex
 plt.figure(figsize=(6,4))
 sns.countplot(x=df['sex'])
 plt.title('Count of Sex')
@@ -46,7 +44,6 @@ plt.xlabel('Sex')
 plt.ylabel('Count')
 plt.show()
 
-# Countplot for smoker
 plt.figure(figsize=(6,4))
 sns.countplot(x=df['smoker'])
 plt.title('Count of Smoker')
@@ -65,3 +62,30 @@ plt.figure(figsize=(8,6))
 sns.heatmap(df.corr(numeric_only=True),annot=True)
 plt.title('Correlation Heatmap')
 plt.show()
+
+#DATA CLEANING AND PREPROCESSING
+
+df_cleaned = df.copy()
+
+print(df_cleaned.head())
+print("------")
+print(df_cleaned.shape)
+print("------")
+
+print(df_cleaned['sex'].value_counts())
+df_cleaned['sex']=df_cleaned['sex'].map({"male":0,"female":1})
+print(df_cleaned.head())
+
+print(df_cleaned['smoker'].value_counts())
+df_cleaned['smoker']=df_cleaned['smoker'].map({"no":0,"yes":1})
+print(df_cleaned.head())
+
+df_cleaned.rename(columns={
+    'sex':"is_female",
+    'smoker':'is_smoker'
+},inplace=True)
+
+df_cleaned = pd.get_dummies(df_cleaned,columns=['region'],drop_first=True)
+df_cleaned.head()
+df_cleaned = df_cleaned.astype(int)
+print(df_cleaned)
